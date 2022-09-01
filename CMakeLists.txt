@@ -22,6 +22,7 @@ find_package(Qt5 COMPONENTS
 
 set(${PROJECT_NAME}_SRC
     src/main.cpp
+    src/qml.qrc
 )
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})
