@@ -20,8 +20,15 @@ find_package(Qt5 COMPONENTS
     QuickControls2
 )
 
+find_package(KF5 COMPONENTS
+    Config
+    XmlGui
+    I18n
+)
+
 set(${PROJECT_NAME}_SRC
     src/main.cpp
+    src/application.cpp
     src/qml.qrc
 )
 
@@ -31,7 +38,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt5::Widgets
     Qt5::Core
     Qt5::Quick
-    Qt5::QuickControls2    
+    Qt5::QuickControls2
+    KF5::ConfigCore
+    KF5::XmlGui
+    KF5::I18n
     mpv
     mediainfo
 )
