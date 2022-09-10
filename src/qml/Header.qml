@@ -20,7 +20,7 @@ ToolBar {
 
         RowLayout {
             id: headerRowCenter
-            Layout.alignment: Qt.AlignCenter
+            Layout.alignment: Qt.AlignHCenter
         }
 
         RowLayout {
@@ -29,7 +29,7 @@ ToolBar {
 
             ToolButton {
                 text: qsTr("Playlist")
-                onClicked: (playList.state == "hidden" )
+                onClicked: (playList.state === "hidden") ? playList.state = "visible" : playList.state = "hidden"
             }
 
             ToolButton {

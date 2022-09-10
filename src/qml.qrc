@@ -4,5 +4,6 @@
         <file>qml/Header.qml</file>
         <file>qml/PlayList.qml</file>
         <file>qml/PlayListItem.qml</file>
+        <file>qml/MpvVideo.qml</file>
     </qresource>
 </RCC>

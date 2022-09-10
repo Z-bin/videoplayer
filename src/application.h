@@ -17,6 +17,9 @@ public:
     ~Application() = default;
 
 public slots:
+    void configureShortcust();  // 配置快捷键
+    void hideCursor();
+    void showCursor();
     QAction *action(const QString &name);
     QString iconName(const QIcon &icon);
 

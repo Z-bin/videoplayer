@@ -2,11 +2,15 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQmlContext>
+#include <QThread>
 #include <QApplication>
-#include <QAction>
-#include <QQuickView>
 
 #include "_debug.h"
+#include "worker.h"
+#include "mpvobject.h"
+#include "videoitem.h"
+#include "videolist.h"
+#include "videolistmodel.h"
 #include "application.h"
 
 #include <memory>
@@ -23,12 +27,24 @@ int main(int argc, char *argv[])
     // requires the LC_NUMERIC category to be set to "C", so change it back.
     std::setlocale(LC_NUMERIC, "C");
 
+    qmlRegisterType<MpvObject>("mpv", 1, 0, "MpvObject");
+    // 注册C++类型提供给QML
     qmlRegisterInterface<QAction>("QAction");
 
     QQuickStyle::setStyle(QStringLiteral("org.kde.desktop"));
     QQuickStyle::setFallbackStyle(QStringLiteral("Fusion"));
 
     std::unique_ptr<Application> myApp = std::make_unique<Application>();
+
+    // 放入线程中防止获取时间阻塞
+    auto worker = Worker::instance();
+    auto thread = new QThread();
+    worker->moveToThread(thread);
+    QObject::connect(thread, &QThread::finished,
+                     worker, &Worker::deleteLater);
+    QObject::connect(thread, &QThread::finished,
+                     thread, &QThread::deleteLater);
+    thread->start();
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
@@ -38,11 +54,27 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
+    VideoList *videoList = new VideoList();
+    engine.rootContext()->setContextProperty("videoList", videoList);
+    qmlRegisterUncreatableType<VideoList>("VideoPlayList", 1, 0, "VideoList",
+                                          QStringLiteral("VideoList should not be created in QML"));
+    VideoListModel videoListModel(videoList);
+    engine.rootContext()->setContextProperty("videoListModel", &videoListModel);
+    qmlRegisterUncreatableType<VideoListModel>("VideoPlayList", 1, 0, "VideoListModel",
+                                               QStringLiteral("VideoListModel should not be created in QML"));
+
     engine.rootContext()->setContextProperty(QStringLiteral("app"), myApp.release());
     qmlRegisterUncreatableType<Application>("Application", 1, 0, "Application",
                                                QStringLiteral("Application should not be created in QML"));
 
     engine.load(url);
+
+    QObject *item = engine.rootObjects().first();
+    QObject::connect(item, SIGNAL(setHovered(int)),
+                     videoList, SLOT(setHovered(int)));
+    QObject::connect(item, SIGNAL(removeHovered(int)),
+                     videoList, SLOT(removeHovered(int)));
+
 
     app.exec();
 }

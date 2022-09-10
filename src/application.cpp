@@ -19,6 +19,27 @@ Application::Application(QObject *parent)
     m_shortcuts = new KConfigGroup(m_config, "Shortcuts");
 }
 
+void Application::configureShortcust()
+{
+    KShortcutsDialog dlg(KShortcutsEditor::AllActions, KShortcutsEditor::LetterShortcutsAllowed, nullptr);
+    connect(&dlg, &KShortcutsDialog::accepted, this, [ = ](){
+        m_collection.writeSettings(m_shortcuts);
+        m_config->sync();
+    });
+    dlg.setModal(true);
+    dlg.addCollection(&m_collection);
+    dlg.configure(false);
+}
+
+void Application::hideCursor()
+{
+    QApplication::setOverrideCursor(Qt::BlankCursor);
+}
+
+void Application::showCursor()
+{
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+}
 
 QAction *Application::action(const QString &name)
 {
@@ -43,6 +64,42 @@ void Application::setupActions(const QString &actionName)
         m_collection.addAction(actionName, action);
     }
 
+    if (actionName == QStringLiteral("options_configure_keybinding")) {
+        auto action = KStandardAction::keyBindings(this, &Application::configureShortcust, &m_collection);
+        m_collection.setDefaultShortcut(action, Qt::CTRL + Qt::Key_S);
+        m_collection.addAction(actionName, action);
+    }
+
+    // mpv快捷键
+    if (actionName == QStringLiteral("seekForward")) {
+        QAction *action = new QAction(this);
+        action->setText(i18n("Seek Forward"));
+        action->setIcon(QIcon::fromTheme("media-seek-forward"));
+        action->setShortcut(QKeySequence(Qt::Key_Right));
+        m_collection.setDefaultShortcut(action, Qt::Key_Right);
+        m_collection.addAction(actionName, action);
+    }
+    if (actionName == QStringLiteral("seekBackward")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Seek Backward"));
+        action->setIcon(QIcon::fromTheme("media-seek-backward"));
+        m_collection.setDefaultShortcut(action, Qt::Key_Left);
+        m_collection.addAction(actionName, action);
+    }
+    if (actionName == QStringLiteral("seekNextSubtitle")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Seek To Next Subtitle"));
+        action->setIcon(QIcon::fromTheme("media-seek-forward"));
+        m_collection.setDefaultShortcut(action, Qt::CTRL + Qt::Key_Right);
+        m_collection.addAction(actionName, action);
+    }
+    if (actionName == QStringLiteral("seekPreviousSubtitle")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Seek To Previous Subtitle"));
+        action->setIcon(QIcon::fromTheme("media-seek-backward"));
+        m_collection.setDefaultShortcut(action, Qt::CTRL + Qt::Key_Left);
+        m_collection.addAction(actionName, action);
+    }
     DEBUG << actionName;
     m_collection.readSettings(m_shortcuts);
 }

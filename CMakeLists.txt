@@ -29,6 +29,11 @@ find_package(KF5 COMPONENTS
 set(${PROJECT_NAME}_SRC
     src/main.cpp
     src/application.cpp
+    src/mpvobject.cpp
+    src/videoitem.cpp
+    src/videolistmodel.cpp
+    src/videolist.cpp
+    src/worker.cpp
     src/qml.qrc
 )
 
