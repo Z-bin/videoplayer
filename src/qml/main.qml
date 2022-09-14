@@ -61,9 +61,21 @@ ApplicationWindow {
 
     header: Header { id: headr }
 
+    footer: Footer { id: footer }
+
     MpvVideo { id: mpv }
 
     PlayList { id: playList }
+
+    // 页脚
+    Rectangle {
+        id: fullscreenFooter
+        anchors.bottom: mpv.bottom
+        width: window.width
+        height: footer.height
+        visible: false
+        color: Qt.rgba(0.14, 0.15, 0.16, 0.8)
+    }
 
 
     FileDialog {
@@ -87,6 +99,45 @@ ApplicationWindow {
         icon.name: "document-open"
         shortcut: StandardKey.Open
         onTriggered: fileDialog.open()
+    }
+
+    Action {
+        id: seekForwardAction
+        text: seekForward.text
+        shortcut: seekForward.shortcut
+        icon.name: app.iconName(seekForward.icon)
+        onTriggered: mpv.command(["seek", "+5"])
+    }
+
+    Action {
+        id: seekBackwardAction
+        text: seekBackward.text
+        shortcut: seekBackward.shortcut
+        icon.name: app.iconName(seekBackward.icon)
+        onTriggered: mpv.command(["seek", "-5"])
+    }
+
+    Action {
+        id: seekNextSubtitleAction
+        text: seekNextSubtitle.text
+        shortcut: seekNextSubtitle.shortcut
+        icon.name: app.iconName(seekNextSubtitle.icon)
+        onTriggered: mpv.command(["sub-seek", "1"])
+    }
+    Action {
+        id: seekPrevSubtitleAction
+        text: seekPreviousSubtitle.text
+        shortcut: seekPreviousSubtitle.shortcut
+        icon.name: app.iconName(seekPreviousSubtitle.icon)
+        onTriggered: mpv.command(["sub-seek", "-1"])
+    }
+
+    Action {
+        id: playPauseAction
+        text: qsTr("Play/Pause")
+        icon.name: "media-playback-pause"
+        shortcut: "Space"
+        onTriggered: mpv.play_pause()
     }
 
     Action {
