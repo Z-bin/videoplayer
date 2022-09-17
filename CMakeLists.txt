@@ -7,8 +7,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED)
-add_definitions(-D_UNICODE) # CMake生成Unicode版本
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_definitions(-D_UNICODE)
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(KDEInstallDirs)
@@ -19,7 +19,6 @@ find_package(Qt5 COMPONENTS
     Quick
     QuickControls2
 )
-
 find_package(KF5 COMPONENTS
     Config
     XmlGui
@@ -30,17 +29,18 @@ set(${PROJECT_NAME}_SRC
     src/main.cpp
     src/application.cpp
     src/mpvobject.cpp
-    src/videoitem.cpp
     src/videolistmodel.cpp
     src/videolist.cpp
+    src/videoitem.cpp
     src/worker.cpp
     src/qml.qrc
 )
 
+kconfig_add_kcfg_files(${PROJECT_NAME}_SRC GENERATE_MOC settings.kcfgc)
+
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})
-#target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    Qt5::Widgets
     Qt5::Core
     Qt5::Quick
     Qt5::QuickControls2
@@ -50,3 +50,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     mpv
     mediainfo
 )
+
+install(TARGETS ${PROJECT_NAME} DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES settings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
