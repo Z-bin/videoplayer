@@ -134,6 +134,14 @@ MpvObject {
 
         onExited: hideCursorTimer.running = false
 
+        onMouseXChanged: {
+            mx = mouseX
+        }
+
+        onMouseYChanged: {
+            my = mouseY
+        }
+
         onDoubleClicked: {
             if (mouse.button == Qt.LeftButton) {
                 toggleFullScreen()
