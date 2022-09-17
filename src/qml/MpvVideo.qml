@@ -102,7 +102,7 @@ MpvObject {
         property int ty: my
         property int timeNotMoved: 0
 
-        interval: 50; running: false; repeat: true
+        interval: 50; running: true; repeat: true
 
         onTriggered: {
 
@@ -110,7 +110,7 @@ MpvObject {
                 return;
             }
 
-            if (mx == tx && my == ty) {
+            if (mx === tx && my === ty) {
                 if (timeNotMoved > 2000) {
                     app.hideCursor()
                 }
@@ -134,16 +134,29 @@ MpvObject {
 
         onExited: hideCursorTimer.running = false
 
+        // 鼠标靠近右侧显示播放列表
         onMouseXChanged: {
             mx = mouseX
+            if (mouseX > mpv.width - 50
+                    && (mouseY < mpv.height * 0.8 && mouseY > mpv.height * 0.2) /* && videoListModel.rows() > 0*/) {
+                playList.state = "visible"
+            }
+            if (mouseX < mpv.width - playList.width) {
+                playList.state = "hidden"
+            }
         }
 
         onMouseYChanged: {
             my = mouseY
+            if (mouseY > window.height - footer.height && window.visibility === Window.FullScreen) {
+                fullscreenFooter.visible = true
+            } else if (mouseY < window.height - footer.height && window.visibility === Window.FullScreen) {
+                fullscreenFooter.visible = false
+            }
         }
 
         onDoubleClicked: {
-            if (mouse.button == Qt.LeftButton) {
+            if (mouse.button === Qt.LeftButton) {
                 toggleFullScreen()
             }
         }
