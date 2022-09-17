@@ -100,6 +100,5 @@ void Application::setupActions(const QString &actionName)
         m_collection.setDefaultShortcut(action, Qt::CTRL + Qt::Key_Left);
         m_collection.addAction(actionName, action);
     }
-    DEBUG << actionName;
     m_collection.readSettings(m_shortcuts);
 }

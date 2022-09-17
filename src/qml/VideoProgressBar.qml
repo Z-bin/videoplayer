@@ -41,7 +41,6 @@ Slider {
     }
 
     onValueChanged: {
-        console.debug(value)
         if (seekStarted) {
             seekValue = value
         }

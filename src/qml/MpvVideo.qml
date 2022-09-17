@@ -8,6 +8,7 @@ MpvObject {
 
     property int mx
     property int my
+    property alias scrollPositionTimer: scrollPositionTimer
 
     // 双击全屏化事件
     function toggleFullScreen() {
@@ -49,7 +50,6 @@ MpvObject {
     onPositionChanged: {
         // 按下动作时候不处理
         if (!footer.progressBar.seekStarted) {
-            console.debug("onPositionChanged")
             footer.progressBar.value = position
             window.positionChanged(position)
         }
@@ -64,6 +64,35 @@ MpvObject {
             videoList.setPlayingVideo(nextFileRow)
         }
     }
+
+    // 滚动播放列表到播放加载的文件
+    Timer {
+        id: scrollPositionTimer
+        interval: 50; running: true; repeat: true
+
+        onTriggered: {
+            if (playList.tableView.rows <= 0) {
+                return;
+            }
+            // 正在播放的索引列表
+            var rowsAbove = videoList.getPlayingVideo();
+            // 50 是行高，1 是行间距
+            var scrollDistance = (rowsAbove * 50) + (rowsAbove * 1)
+            var scrollAvailableDistance =
+                    ((playList.tableView.rows * 50) + (playList.tableView.rows * 1)) - mpv.height
+            if (scrollDistance > scrollAvailableDistance) {
+                if (scrollAvailableDistance < mpv.height) {
+                    playList.tableView.contentY = 0;
+                } else {
+                    playList.tableView.contentY = scrollAvailableDistance
+                }
+            } else {
+                playList.tableView.contentY = scrollDistance
+            }
+            scrollPositionTimer.stop()
+        }
+    }
+
 
     // 全屏化2000ms后隐藏鼠标
     Timer {
