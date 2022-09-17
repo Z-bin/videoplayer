@@ -47,6 +47,12 @@ ApplicationWindow {
     width: 1280
     height: 720
 
+    onVisibilityChanged: {
+        if (visibility != Window.FullScreen) {
+            preFullScreenVisibility = visibility
+        }
+    }
+
     Settings {
         id: settings
         property string        lastPlayedFile
