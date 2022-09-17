@@ -73,7 +73,7 @@ ApplicationWindow {
 
     PlayList { id: playList }
 
-    // 页脚
+    // 页脚,作为全屏化的进度条背景
     Rectangle {
         id: fullscreenFooter
         anchors.bottom: mpv.bottom
@@ -81,6 +81,20 @@ ApplicationWindow {
         height: footer.height
         visible: false
         color: Qt.rgba(0.14, 0.15, 0.16, 0.8)
+
+        ShaderEffectSource {
+            id: effectSource
+            sourceItem: mpv
+            anchors.fill: parent
+            sourceRect: Qt.rect(footer.x, footer.y, footer.width, footer.height)
+        }
+
+        FastBlur {
+            id: blur
+            anchors.fill: effectSource
+            source: effectSource
+            radius: 100
+        }
     }
 
 
