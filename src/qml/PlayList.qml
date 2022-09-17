@@ -33,6 +33,20 @@ Rectangle {
         z: 20
     }
 
+    ShaderEffectSource {
+        id: shaderEffect
+        anchors.fill: parent
+        sourceItem: mpv
+        sourceRect: Qt.rect(parent.x, parent.y, parent.width, parent.height)
+    }
+
+    FastBlur {
+        anchors.fill: shaderEffect
+        radius: 100
+        source: shaderEffect
+        z: 10
+    }
+
     states: [
         State {
             name: "hidden"

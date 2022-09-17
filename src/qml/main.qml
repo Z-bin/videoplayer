@@ -47,6 +47,7 @@ ApplicationWindow {
     width: 1280
     height: 720
 
+    // 记录全屏和正常化窗口状态
     onVisibilityChanged: {
         if (visibility != Window.FullScreen) {
             preFullScreenVisibility = visibility

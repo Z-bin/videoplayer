@@ -70,6 +70,5 @@ Item {
                 videoList.setPlayingVideo(row)
             }
         }
-
     }
 }

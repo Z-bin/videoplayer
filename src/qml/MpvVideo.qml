@@ -93,7 +93,6 @@ MpvObject {
         }
     }
 
-
     // 全屏化2000ms后隐藏鼠标
     Timer {
         id: hideCursorTimer
@@ -152,6 +151,12 @@ MpvObject {
                 fullscreenFooter.visible = true
             } else if (mouseY < window.height - footer.height && window.visibility === Window.FullScreen) {
                 fullscreenFooter.visible = false
+            }
+        }
+
+        onClicked: {
+            if (mouse.button === Qt.RightButton) {
+                mpv.play_pause()
             }
         }
 
