@@ -166,4 +166,13 @@ MpvObject {
             }
         }
     }
+    DropArea {
+        id: dropArea
+        anchors.fill: parent
+        keys: ["text/uri"]
+
+        onDropped: {
+            window.openFile(drop.urls[0], true, true)
+        }
+    }
 }
