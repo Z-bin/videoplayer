@@ -1,17 +1,18 @@
+#include "_debug.h"
+#include "application.h"
+#include "mpvobject.h"
+#include "tracksmodel.h"
+#include "videoitem.h"
+#include "videolist.h"
+#include "videolistmodel.h"
+#include "worker.h"
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQmlContext>
 #include <QThread>
 #include <QApplication>
-
-#include "_debug.h"
-#include "worker.h"
-#include "mpvobject.h"
-#include "videoitem.h"
-#include "videolist.h"
-#include "videolistmodel.h"
-#include "application.h"
 
 #include <memory>
 
@@ -30,6 +31,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<MpvObject>("mpv", 1, 0, "MpvObject");
     // 注册C++类型提供给QML
     qmlRegisterInterface<QAction>("QAction");
+    qmlRegisterInterface<TracksModel>("TracksModel");
 
     QQuickStyle::setStyle(QStringLiteral("org.kde.desktop"));
     QQuickStyle::setFallbackStyle(QStringLiteral("Fusion"));

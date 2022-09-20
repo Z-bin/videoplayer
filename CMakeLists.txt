@@ -29,6 +29,8 @@ set(${PROJECT_NAME}_SRC
     src/main.cpp
     src/application.cpp
     src/mpvobject.cpp
+    src/track.cpp
+    src/tracksmodel.cpp
     src/videolistmodel.cpp
     src/videolist.cpp
     src/videoitem.cpp

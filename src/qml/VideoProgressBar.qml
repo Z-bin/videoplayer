@@ -33,7 +33,7 @@ Slider {
     handle: Rectangle {
         border.color: systemPalette.light
         color: systemPalette.light
-        implicitWidth: 5
+        implicitWidth: 0
         implicitHeight: 35
         radius: 0
         x: leftPadding + visualPosition * (availableWidth - width)
