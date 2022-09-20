@@ -28,6 +28,7 @@ ToolBar {
             Layout.alignment: Qt.AlignRight
 
             ToolButton {
+                icon.name: "view-media-playlist"
                 text: qsTr("Playlist")
                 onClicked: (playList.state === "hidden") ? playList.state = "visible" : playList.state = "hidden"
             }
