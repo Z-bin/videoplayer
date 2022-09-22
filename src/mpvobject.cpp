@@ -166,6 +166,7 @@ void MpvObject::doUpdate()
             }
             break;
         }
+        // 解码
         case MPV_EVENT_FILE_LOADED: {
             loadTracks();
             break;
