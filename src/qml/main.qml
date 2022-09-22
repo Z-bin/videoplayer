@@ -15,6 +15,7 @@ ApplicationWindow {
 
     property var quitApplication: app.action("file_quit")
     property var configureShortcuts: app.action("options_configure_keybinding")
+    property var openUrl: app.action("openUrl")
     property var seekForward: app.action("seekForward")
     property var seekBackward: app.action("seekBackward")
     property var seekNextSubtitle: app.action("seekNextSubtitle")
@@ -60,6 +61,7 @@ ApplicationWindow {
         property double        lastPlayedPosition
         property double        lastPlayedDuration
         property int           playingFilePosition
+        property alias lastUrl: openUrlTextField.text
         property alias x:      window.x
         property alias y:      window.y
         property alias width:  window.width
@@ -98,21 +100,60 @@ ApplicationWindow {
         }
     }
 
-
     FileDialog {
         id: fileDialog
         folder: shortcuts.movies // 指定打开的文件夹
         title: qsTr("Select file")
         selectMultiple: false    // 禁止选中多个文件
+
         onAccepted: {
-            onAccepted: {
-                openFile(fileDialog.fileUrl, true, true)
-                // 加载表格视图行后，计时器将播放列表滚动到正在播放的文件
-                mpv.scrollPositionTimer.start()
+            openFile(fileDialog.fileUrl, true, true)
+            // 加载表格视图行后，计时器将播放列表滚动到正在播放的文件
+            mpv.scrollPositionTimer.start()
+            mpv.focus = true
+        }
+        onRejected: mpv.focus = true
+    }
+
+    Popup {
+        id: openUrlPopup
+        anchors.centerIn: Overlay.overlay
+        width: mpv.width * 0.7
+
+        onOpened: {
+            openUrlPopup.focus = true
+            openUrlTextField.focus = true
+            openUrlTextField.selectAll()
+        }
+
+        RowLayout {
+            anchors.fill: parent
+            TextField {
+                id: openUrlTextField
+                Layout.fillWidth: true
+
+                Keys.onPressed: {
+                    if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                        openFile(openUrlTextField.text, true, false)
+                        openUrlPopup.close()
+                    }
+                    if (event.key === Qt.Key_Escape) {
+                        openUrlPopup.close()
+                    }
+                }
+            }
+
+            Button {
+                id: openUrlButton
+                text: qsTr("Open")
+
+                onClicked: {
+                    openFile(openUrlTextField.text, true, false)
+                    openUrlPopup.close()
+                }
             }
         }
     }
-
 
     Action {
         id: openAction
@@ -120,6 +161,14 @@ ApplicationWindow {
         icon.name: "document-open"
         shortcut: StandardKey.Open
         onTriggered: fileDialog.open()
+    }
+
+    Action {
+        id: openUrlAction
+        text: openUrl.text
+        shortcut: openUrl.shortcut
+        icon.name: app.iconName(openUrl.icon)
+        onTriggered: openUrlPopup.open()
     }
 
     Action {
@@ -159,6 +208,14 @@ ApplicationWindow {
         icon.name: "media-playback-pause"
         shortcut: "Space"
         onTriggered: mpv.play_pause()
+    }
+
+    Action {
+        id: configureShortcutsAction
+        text: configureShortcuts.text
+        icon.name: app.iconName(configureShortcuts.icon)
+        shortcut: configureShortcuts.shortcut
+        onTriggered: configureShortcuts.trigger()
     }
 
     Action {

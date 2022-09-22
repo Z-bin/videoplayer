@@ -15,13 +15,39 @@ ToolBar {
             id: headerRowLeft
             Layout.alignment: Qt.AlignLeft
             ToolButton {
-                action: openAction
+                icon.name: "document-open"
+                text: qsTr("Open")
+
+                onReleased: {
+                    openMenu.open();
+                    mpv.focus = true
+                }
+
+                Menu {
+                    id: openMenu
+                    y:  parent.height
+
+                    MenuItem {
+                        action: openAction
+                    }
+
+                    MenuItem {
+                        action: openUrlAction
+                    }
+
+                }
             }
+
             ToolButton {
                 icon.name: "media-view-subtitles-symbolic"
                 text: qsTr("Subtitles")
                 onClicked: {
                     subtitleMenuInstantiator.model = mpv.subtitleTracksModel()
+                }
+
+                onReleased: {
+                    subtitleMenu.open()
+                    mpv.focus = true
                 }
 
                 Menu {
@@ -45,8 +71,6 @@ ToolBar {
                         }
                     }
                 }
-
-                onReleased: subtitleMenu.open()
             }
 
             ToolButton {

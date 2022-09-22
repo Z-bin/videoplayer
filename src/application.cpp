@@ -70,6 +70,14 @@ void Application::setupActions(const QString &actionName)
         m_collection.addAction(actionName, action);
     }
 
+    if (actionName == QStringLiteral("openUrl")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Open Url"));
+        action->setIcon(QIcon::fromTheme("internet-services"));
+        m_collection.setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_O);
+        m_collection.addAction(actionName, action);
+    }
+
     // mpv快捷键
     if (actionName == QStringLiteral("seekForward")) {
         QAction *action = new QAction(this);
