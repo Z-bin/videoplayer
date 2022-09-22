@@ -9,16 +9,8 @@ MpvObject {
     property int mx
     property int my
     property alias scrollPositionTimer: scrollPositionTimer
-    signal setSubtitle(int id)
+    signal setSubtitle(int id, bool checked)
     signal setAudio(int id)
-
-    onSetSubtitle: {
-        mpv.setProperty("sid", id)
-    }
-
-    onSetAudio: {
-        mpv.setProperty("aid", id)
-    }
 
     // 双击全屏化事件
     function toggleFullScreen() {
@@ -35,6 +27,18 @@ MpvObject {
             fullscreenFooter.visible = false
             footer.footerRow.parent = footer
         }
+    }
+
+    onSetSubtitle: {
+        if (checked) {
+            mpv.setProperty("sid", id)
+        } else {
+            mpv.setProperty("sid", "no")
+        }
+    }
+
+    onSetAudio: {
+        mpv.setProperty("aid", id)
     }
 
     anchors.fill: parent

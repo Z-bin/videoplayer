@@ -39,7 +39,7 @@ ToolBar {
                             checked: model.selected
                             text: `${model.language}: ${model.title} ${model.codec}`
                             onTriggered: {
-                                mpv.setSubtitle(model.id)
+                                mpv.setSubtitle(model.id, checked)
                                 mpv.subtitleTracksModel().updateSelectedTrack(model.id)
                             }
                         }
