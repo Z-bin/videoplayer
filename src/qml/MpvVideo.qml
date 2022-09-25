@@ -82,7 +82,7 @@ MpvObject {
     onEndOfFile: {
         var nextFileRow = videoList.getPlayingVideo() + 1
         if (nextFileRow < playList.tableView.rows) {
-            var nextFile = playList.tableView.contentItem.children[nextFileRow].path
+            var nextFile = videoList.getPath(nextFileRow)
             window.openFile(nextFile, true, false)
             videoList.setPlayingVideo(nextFileRow)
         }

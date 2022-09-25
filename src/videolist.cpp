@@ -100,6 +100,11 @@ int VideoList::getPlayingVideo() const
     return m_playingVideo;
 }
 
+QString VideoList::getPath(int i)
+{
+    return m_videoList[i]->filePath();
+}
+
 QMap<int, VideoItem *> VideoList::items() const
 {
     return m_videoList;
