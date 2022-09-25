@@ -26,6 +26,8 @@ ApplicationWindow {
     signal removeHovered(int row)
     signal durationChanged(double duration)
     signal positionChanged(double position)
+    signal remainingChanged(double remaining)
+    signal chaptersLoaded(var chapters)
 
     function openFile(path, startPlayBack, loadSiblings) {
         mpv.loadFile(path)

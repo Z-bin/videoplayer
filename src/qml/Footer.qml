@@ -43,7 +43,6 @@ ToolBar {
         // 播放时间比
         Text {
             id: time
-            property double duration_
             property string formattedDuration
             property string formattedPosition
             property string toolTipText
@@ -63,10 +62,16 @@ ToolBar {
             Connections {
                 target: window
                 onPositionChanged: {
-                    var toolTipTime = mpv.formatTime((time.duration_ - position))
-                    var formattedPosition = mpv.formatTime(position)
-                    time.toolTipText = toolTipTime
-                    time.formattedPosition = formattedPosition
+                    var p = mpv.formatTime(position)
+                    time.formattedPosition = p
+                }
+            }
+
+            Connections {
+                target: window
+                onRemainingChanged: {
+                    var r = mpv.formatTime(remaining)
+                    time.toolTipText = r
                 }
             }
 
@@ -74,8 +79,8 @@ ToolBar {
             Connections {
                 target: window
                 onDurationChanged: {
-                    time.duration_ = duration
-                    time.formattedDuration = mpv.formatTime(duration)
+                    var d = mpv.formatTime(duration)
+                    time.formattedDuration = d
                 }
             }
 

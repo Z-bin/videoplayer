@@ -69,6 +69,15 @@ MpvObject {
         }
     }
 
+    // 剩余播放时间
+    onRemainingChanged: {
+        window.remainingChanged(remaining)
+    }
+
+    onChaptersChanged: {
+        footer.progressBar.chapters = chapters
+    }
+
     // 待研究
     onEndOfFile: {
         var nextFileRow = videoList.getPlayingVideo() + 1
