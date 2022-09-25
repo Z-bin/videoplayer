@@ -5,6 +5,8 @@ import QtQml 2.12
 
 ToolBar {
     id: root
+    property var audioTracks
+    property var subtitleTracks
     position: ToolBar.Header
 
     RowLayout {
@@ -14,18 +16,19 @@ ToolBar {
         RowLayout {
             id: headerRowLeft
             Layout.alignment: Qt.AlignLeft
+
             ToolButton {
                 icon.name: "document-open"
                 text: qsTr("Open")
 
                 onReleased: {
-                    openMenu.open();
+                    openMenu.open()
                     mpv.focus = true
                 }
 
                 Menu {
                     id: openMenu
-                    y:  parent.height
+                    y: parent.height
 
                     MenuItem {
                         action: openAction
@@ -34,16 +37,12 @@ ToolBar {
                     MenuItem {
                         action: openUrlAction
                     }
-
                 }
             }
 
             ToolButton {
                 icon.name: "media-view-subtitles-symbolic"
                 text: qsTr("Subtitles")
-                onClicked: {
-                    subtitleMenuInstantiator.model = mpv.subtitleTracksModel()
-                }
 
                 onReleased: {
                     subtitleMenu.open()
@@ -56,17 +55,17 @@ ToolBar {
 
                     Instantiator {
                         id: subtitleMenuInstantiator
-                        model: 0
+                        model: subtitleTracks
                         onObjectAdded: subtitleMenu.insertItem( index, object )
                         onObjectRemoved: subtitleMenu.removeItem( object )
                         delegate: MenuItem {
                             id: subtitleMenuItem
                             checkable: true
-                            checked: model.selected
-                            text: `${model.language}: ${model.title} ${model.codec}`
+                            checked: modelData.selected
+                            text: `${modelData.lang}: ${modelData.title} ${modelData.codec}`
                             onTriggered: {
-                                mpv.setSubtitle(model.id, checked)
-                                mpv.subtitleTracksModel().updateSelectedTrack(model.id)
+                                mpv.setSubtitle(modelData.id, checked)
+                                subtitleTracks = mpv.getProperty("track-list").filter(t => t["type"] === "sub")
                             }
                         }
                     }
@@ -76,8 +75,10 @@ ToolBar {
             ToolButton {
                 icon.name: "audio-volume-high"
                 text: qsTr("Audio")
-                onClicked: {
-                    audioMenuInstantiator.model = mpv.audioTracksModel()
+
+                onReleased: {
+                    audioMenu.open()
+                    mpv.focus = true
                 }
 
                 Menu {
@@ -86,30 +87,22 @@ ToolBar {
 
                     Instantiator {
                         id: audioMenuInstantiator
-                        model: 0
+                        model: audioTracks
                         onObjectAdded: audioMenu.insertItem( index, object )
                         onObjectRemoved: audioMenu.removeItem( object )
                         delegate: MenuItem {
                             id: audioMenuItem
                             checkable: true
-                            checked: model.selected
-                            text: `${model.language}: ${model.title} ${model.codec}`
+                            checked: modelData.selected
+                            text: `${modelData.lang}: ${modelData.title} ${modelData.codec}`
                             onTriggered: {
-                                mpv.setAudio(model.id)
-                                mpv.audioTracksModel().updateSelectedTrack(model.id)
+                                mpv.setAudio(modelData.id)
+                                audioTracks = mpv.getProperty("track-list").filter(t => t["type"] === "audio")
                             }
                         }
                     }
                 }
-
-                onReleased: audioMenu.open()
             }
-
-        }
-
-        RowLayout {
-            id: headerRowCenter
-            Layout.alignment: Qt.AlignHCenter
         }
 
         RowLayout {
@@ -120,6 +113,7 @@ ToolBar {
                 icon.name: "view-media-playlist"
                 text: qsTr("Playlist")
                 onClicked: (playList.state === "hidden") ? playList.state = "visible" : playList.state = "hidden"
+                onReleased: mpv.focus = true
             }
 
             ToolButton {

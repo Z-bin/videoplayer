@@ -29,6 +29,27 @@ MpvObject {
         }
     }
 
+    function setPlayListScrollPosition() {
+        if (playList.tableView.rows <= 0) {
+            return;
+        }
+        // 正在播放的索引列表
+        var rowsAbove = videoList.getPlayingVideo();
+        // 50 是行高，1 是行间距
+        var scrollDistance = (rowsAbove * 50) + (rowsAbove * 1)
+        var scrollAvailableDistance =
+                ((playList.tableView.rows * 50) + (playList.tableView.rows * 1)) - mpv.height
+        if (scrollDistance > scrollAvailableDistance) {
+            if (scrollAvailableDistance < mpv.height) {
+                playList.tableView.contentY = 0;
+            } else {
+                playList.tableView.contentY = scrollAvailableDistance
+            }
+        } else {
+            playList.tableView.contentY = scrollDistance
+        }
+    }
+
     onSetSubtitle: {
         if (checked) {
             mpv.setProperty("sid", id)
@@ -51,6 +72,15 @@ MpvObject {
         footer.progressBar.from = 0
         footer.progressBar.to = settings.lastPlayedDuration
         footer.progressBar.value = settings.lastPlayedPosition;
+        window.positionChanged(settings.lastPlayedPosition)
+        window.durationChanged(settings.lastPlayedDuration)
+    }
+
+    // 加载文件时获取章节
+    onFileLoaded: {
+        footer.progressBar.chapters = mpv.getProperty("chapter-list")
+        header.audioTracks = mpv.getProperty("track-list").filter(track => track["type"] === "audio")
+        header.subtitleTracks = mpv.getProperty("track-list").filter(track => track["type"] === "sub")
     }
 
     onDurationChanged: {
@@ -74,10 +104,6 @@ MpvObject {
         window.remainingChanged(remaining)
     }
 
-    onChaptersChanged: {
-        footer.progressBar.chapters = chapters
-    }
-
     // 待研究
     onEndOfFile: {
         var nextFileRow = videoList.getPlayingVideo() + 1
@@ -94,24 +120,7 @@ MpvObject {
         interval: 50; running: true; repeat: true
 
         onTriggered: {
-            if (playList.tableView.rows <= 0) {
-                return;
-            }
-            // 正在播放的索引列表
-            var rowsAbove = videoList.getPlayingVideo();
-            // 50 是行高，1 是行间距
-            var scrollDistance = (rowsAbove * 50) + (rowsAbove * 1)
-            var scrollAvailableDistance =
-                    ((playList.tableView.rows * 50) + (playList.tableView.rows * 1)) - mpv.height
-            if (scrollDistance > scrollAvailableDistance) {
-                if (scrollAvailableDistance < mpv.height) {
-                    playList.tableView.contentY = 0;
-                } else {
-                    playList.tableView.contentY = scrollAvailableDistance
-                }
-            } else {
-                playList.tableView.contentY = scrollDistance
-            }
+            setPlayListScrollPosition()
             scrollPositionTimer.stop()
         }
     }
@@ -189,13 +198,15 @@ MpvObject {
         onDoubleClicked: {
             if (mouse.button === Qt.LeftButton) {
                 toggleFullScreen()
+                setPlayListScrollPosition()
+                app.showCursor()
             }
         }
     }
     DropArea {
         id: dropArea
         anchors.fill: parent
-        keys: ["text/uri"]
+        keys: ["text/uri-list"]
 
         onDropped: {
             window.openFile(drop.urls[0], true, true)
