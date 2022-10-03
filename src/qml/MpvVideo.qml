@@ -9,7 +9,7 @@ MpvObject {
     property int mx
     property int my
     property alias scrollPositionTimer: scrollPositionTimer
-    signal setSubtitle(int id, bool checked)
+    signal setSubtitle(int id)
     signal setAudio(int id)
 
     // 双击全屏化事件
@@ -51,7 +51,7 @@ MpvObject {
     }
 
     onSetSubtitle: {
-        if (checked) {
+        if (id !== -1) {
             mpv.setProperty("sid", id)
         } else {
             mpv.setProperty("sid", "no")

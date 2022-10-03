@@ -46,8 +46,8 @@ Item {
             ToolTip {
                 id: toolTip
                 delay: 250
-                visible: model.isHovered
-                text: label.text
+                visible: false
+                text: model.name
             }
         }
     }
