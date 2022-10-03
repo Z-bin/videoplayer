@@ -61,22 +61,6 @@ void VideoList::getVideos(QString path)
     emit postItemsAppended();
 }
 
-void VideoList::setHovered(int row)
-{
-    m_videoList[row]->setIsHovered(true);
-    emit dataChanged(row, 0);
-    emit dataChanged(row, 1);
-    emit dataChanged(row, 2);
-}
-
-void VideoList::removeHovered(int row)
-{
-    m_videoList[row]->setIsHovered(false);
-    emit dataChanged(row, 0);
-    emit dataChanged(row, 1);
-    emit dataChanged(row, 2);
-}
-
 void VideoList::setPlayingVideo(int playingVideo)
 {
     if (m_playingVideo != -1) {

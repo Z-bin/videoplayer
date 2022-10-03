@@ -71,12 +71,5 @@ int main(int argc, char *argv[])
 
     engine.load(url);
 
-    QObject *item = engine.rootObjects().first();
-    QObject::connect(item, SIGNAL(setHovered(int)),
-                     videoList, SLOT(setHovered(int)));
-    QObject::connect(item, SIGNAL(removeHovered(int)),
-                     videoList, SLOT(removeHovered(int)));
-
-
     app.exec();
 }
