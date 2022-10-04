@@ -57,6 +57,17 @@ QString Application::iconName(const QIcon &icon)
     return icon.name();
 }
 
+QString Application::setting(const QString group, const QString key)
+{
+    return m_config->group("General").readEntry(key);
+}
+
+void Application::setSetting(const QString group, const QString key, const QString value)
+{
+    m_config->group(group).writeEntry(key, value);
+    m_config->sync();
+}
+
 void Application::setupActions(const QString &actionName)
 {
     if (actionName == QStringLiteral("file_quit")) {

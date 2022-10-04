@@ -99,7 +99,7 @@ Slider {
             seekValue = value
         }
         // 记录点击位置,下次打开有效
-        settings.lastPlayedPosition = value
+        app.setSetting("General", "lastPlayedPosition", value)
     }
 
     onPressedChanged: {

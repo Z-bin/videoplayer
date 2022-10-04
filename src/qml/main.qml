@@ -4,10 +4,9 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.12
-import Qt.labs.settings 1.0
+import Qt.labs.platform 1.0 as PlatformDialog
 
 import mpv 1.0
-import Application 1.0
 import VideoPlayList 1.0
 
 ApplicationWindow {
@@ -45,7 +44,7 @@ ApplicationWindow {
             videoList.getVideos(path)
         }
 
-        settings.lastPlayedFile = path
+        app.setSetting("General", "lastPlayedFile", path)
     }
 
     visible: true
@@ -58,19 +57,6 @@ ApplicationWindow {
         if (visibility != Window.FullScreen) {
             preFullScreenVisibility = visibility
         }
-    }
-
-    Settings {
-        id: settings
-        property string        lastPlayedFile
-        property double        lastPlayedPosition
-        property double        lastPlayedDuration
-        property int           playingFilePosition
-        property alias lastUrl: openUrlTextField.text
-        property alias x:      window.x
-        property alias y:      window.y
-        property alias width:  window.width
-        property alias height: window.height
     }
 
     header: Header { id: headr }
@@ -105,14 +91,14 @@ ApplicationWindow {
         }
     }
 
-    FileDialog {
+    PlatformDialog.FileDialog {
         id: fileDialog
-        folder: shortcuts.movies // 指定打开的文件夹
+        folder: PlatformDialog.StandardPaths.writableLocation(PlatformDialog.StandardPaths.MoviesLocation) // 指定打开的文件夹
         title: qsTr("Select file")
-        selectMultiple: false    // 禁止选中多个文件
+        fileMode: PlatformDialog.FileDialog.OpenFile    // 禁止选中多个文件
 
         onAccepted: {
-            openFile(fileDialog.fileUrl, true, true)
+            openFile(fileDialog.file, true, true)
             // 加载表格视图行后，计时器将播放列表滚动到正在播放的文件
             mpv.scrollPositionTimer.start()
             mpv.focus = true
@@ -141,6 +127,8 @@ ApplicationWindow {
                     if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                         openFile(openUrlTextField.text, true, false)
                         openUrlPopup.close()
+                        app.setSetting("General", "lastUrl", openUrlTextField.text)
+                        openUrlTextField.text = ""
                     }
                     if (event.key === Qt.Key_Escape) {
                         openUrlPopup.close()
@@ -155,6 +143,8 @@ ApplicationWindow {
                 onClicked: {
                     openFile(openUrlTextField.text, true, false)
                     openUrlPopup.close()
+                    app.setSetting("General", "lastUrl", openUrlTextField.text)
+                    openUrlTextField.text = ""
                 }
             }
         }

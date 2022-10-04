@@ -66,14 +66,14 @@ MpvObject {
 
     onReady: {
         // 打开上次播放的文件，暂停并在播放器关闭或上次保存时的位置
-        window.openFile(settings.lastPlayedFile, false, true)
-        root.setProperty("start", "+" + settings.lastPlayedPosition)
+        window.openFile(app.setting("General", "lastPlayedFile"), false, true)
+        root.setProperty("start", "+" + app.setting("General", "lastPlayedPosition"))
         // 设置进度条位置
-        footer.progressBar.from = 0
-        footer.progressBar.to = settings.lastPlayedDuration
-        footer.progressBar.value = settings.lastPlayedPosition;
-        window.positionChanged(settings.lastPlayedPosition)
-        window.durationChanged(settings.lastPlayedDuration)
+        footer.progressBar.from = 0;
+        footer.progressBar.to = app.setting("General", "lastPlayedDuration")
+        footer.progressBar.value = app.setting("General", "lastPlayedPosition")
+        window.positionChanged(app.setting("General", "lastPlayedPosition"))
+        window.durationChanged(app.setting("General", "lastPlayedDuration"))
     }
 
     // 加载文件时获取章节
@@ -86,7 +86,7 @@ MpvObject {
     onDurationChanged: {
         footer.progressBar.from = 0
         footer.progressBar.to = duration
-        settings.lastPlayedDuration = duration
+        app.setSetting("General", "lastPlayedDuration", duration)
 
         window.durationChanged(duration)
     }
