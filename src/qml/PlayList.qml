@@ -12,7 +12,7 @@ Rectangle {
     property alias tableView: tableView
 
     height: parent.height
-    width: (parent.width * 0.33) < minWidth ? minWidth : parent.width * 0.33
+    width: (parent.width * 0.33) < 500 ? 500 : parent.width * 0.33
     x: parent.width
 
     onWidthChanged: {
