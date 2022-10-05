@@ -25,11 +25,6 @@ ApplicationWindow {
     property var resetPlayBackSpeed: app.action("resetPlayBackSpeed")       // 重置播放速度
     property int preFullScreenVisibility
 
-    signal durationChanged(double duration)
-    signal positionChanged(double position)
-    signal remainingChanged(double remaining)
-    signal chaptersLoaded(var chapters)
-
     function openFile(path, startPlayBack, loadSiblings) {
         mpv.loadFile(path)
 

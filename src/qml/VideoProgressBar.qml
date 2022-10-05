@@ -9,7 +9,6 @@ Slider {
 
     property var chapters
     property bool seekStarted: false
-    property int seekValue: 0
 
     SystemPalette { id: systemPalette; colorGroup: SystemPalette.Active }
 
@@ -95,9 +94,6 @@ Slider {
     }
 
     onValueChanged: {
-        if (seekStarted) {
-            seekValue = value
-        }
         // 记录点击位置,下次打开有效
         app.setSetting("General", "lastPlayedPosition", value)
     }
@@ -105,7 +101,6 @@ Slider {
     onPressedChanged: {
         if (pressed) {
             seekStarted = true
-            seekValue = value
         } else {
             mpv.command(["seek", value, "absolute"])
             seekStarted = false
