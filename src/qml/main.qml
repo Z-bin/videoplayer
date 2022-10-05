@@ -7,7 +7,6 @@ import QtGraphicalEffects 1.12
 import Qt.labs.platform 1.0 as PlatformDialog
 
 import mpv 1.0
-import VideoPlayList 1.0
 
 ApplicationWindow {
     id: window
@@ -74,21 +73,7 @@ ApplicationWindow {
         width: window.width
         height: footer.height
         visible: false
-        color: Qt.rgba(0.14, 0.15, 0.16, 0.8)
-
-        ShaderEffectSource {
-            id: effectSource
-            sourceItem: mpv
-            anchors.fill: parent
-            sourceRect: Qt.rect(footer.x, footer.y, footer.width, footer.height)
-        }
-
-        FastBlur {
-            id: blur
-            anchors.fill: effectSource
-            source: effectSource
-            radius: 100
-        }
+        color: "#31363B"
     }
 
     PlatformDialog.FileDialog {
@@ -171,7 +156,7 @@ ApplicationWindow {
         text: seekForward.text
         shortcut: seekForward.shortcut
         icon.name: app.iconName(seekForward.icon)
-        onTriggered: mpv.command(["seek", "+5"])
+        onTriggered: mpv.command(["seek", "+5", "extract"])
     }
 
     Action {
@@ -179,7 +164,7 @@ ApplicationWindow {
         text: seekBackward.text
         shortcut: seekBackward.shortcut
         icon.name: app.iconName(seekBackward.icon)
-        onTriggered: mpv.command(["seek", "-5"])
+        onTriggered: mpv.command(["seek", "-5", "exact"])
     }
 
     Action {
@@ -187,14 +172,26 @@ ApplicationWindow {
         text: seekNextSubtitle.text
         shortcut: seekNextSubtitle.shortcut
         icon.name: app.iconName(seekNextSubtitle.icon)
-        onTriggered: mpv.command(["sub-seek", "1"])
+        onTriggered: {
+            if (mpv.getProperty("sid") !== false) {
+                mpv.command(["sub-seek", "1"])
+            } else {
+                seekForwardAction.trigger()
+            }
+        }
     }
     Action {
         id: seekPrevSubtitleAction
         text: seekPreviousSubtitle.text
         shortcut: seekPreviousSubtitle.shortcut
         icon.name: app.iconName(seekPreviousSubtitle.icon)
-        onTriggered: mpv.command(["sub-seek", "-1"])
+        onTriggered: {
+             if (mpv.getProperty("sid") !== false) {
+                 mpv.command(["sub-seek", "-1"])
+             } else {
+                 seekBackwardAction.trigger()
+             }
+         }
     }
 
     Action {
