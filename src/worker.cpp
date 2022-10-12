@@ -1,13 +1,13 @@
-#include "worker.h"
 #include "_debug.h"
+#include "worker.h"
 
 #include <QDateTime>
 #include <QThread>
 #include <MediaInfo/MediaInfo.h>
 
-Worker *Worker::sm_worker = nullptr;
+Worker* Worker::sm_worker = 0;
 
-Worker *Worker::instance()
+Worker* Worker::instance()
 {
     if (!sm_worker) {
         sm_worker = new Worker();
@@ -19,11 +19,11 @@ void Worker::getVideoDuration(int index, QString path)
 {
     MediaInfoLib::MediaInfo MI;
     MI.Open(path.toStdWString());
-    int miliseconds = std::stoi(MI.Get(
-        MediaInfoLib::Stream_General, 0, L"Duration")
-    );
+    QString duration = QString::fromStdWString(MI.Get(MediaInfoLib::Stream_General, 0, L"Duration"));
+    if (duration.isEmpty()) {
+        return;
+    }
     MI.Close();
-    double seconds = miliseconds/1000;
-    QDateTime duration = QDateTime::fromTime_t(seconds).toUTC();
-    emit videoDuration(index, duration.toString("hh:mm:ss"));
+    QDateTime UTCDuration = QDateTime::fromMSecsSinceEpoch(duration.toInt()).toUTC();
+    emit videoDuration(index, UTCDuration.toString("hh:mm:ss"));
 }
