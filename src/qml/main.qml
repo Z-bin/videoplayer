@@ -23,6 +23,8 @@ ApplicationWindow {
     property var increasePlayBackSpeed: app.action("increasePlayBackSpeed") // 增加播放速度
     property var decreasePlayBackSpeed: app.action("decreasePlayBackSpeed") // 减慢播放速度
     property var resetPlayBackSpeed: app.action("resetPlayBackSpeed")       // 重置播放速度
+    property var configure: app.action("configure")
+
     property int preFullScreenVisibility
 
     function openFile(path, startPlayBack, loadSiblings) {
@@ -251,5 +253,13 @@ ApplicationWindow {
         icon.name: app.iconName(quitApplication.icon)
         shortcut: quitApplication.shortcut
         onTriggered: quitApplication.trigger()
+    }
+
+    Action {
+        id: configureAction
+        text: configure.text
+        icon.name: app.iconName(configure.icon)
+        shortcut: configure.shortcut
+        onTriggered: configure.trigger()
     }
 }

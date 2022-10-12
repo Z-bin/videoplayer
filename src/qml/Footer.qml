@@ -8,10 +8,12 @@ ToolBar {
     property alias progressBar: progressBar
     property alias footerRow: footerRow
     property alias timeInfo: timeInfo
+    property alias playPauseButton: playPauseButton
 
     contentHeight: 40
     contentWidth: window.width
     position: ToolBar.Footer
+
 
     RowLayout {
         id: footerRow
@@ -21,6 +23,7 @@ ToolBar {
             id: playPauseButton
             action: playPauseAction
             text: ""
+            icon.name: "media-playback-start"
         }
 
         ToolButton {

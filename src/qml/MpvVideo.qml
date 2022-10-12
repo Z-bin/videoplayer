@@ -70,6 +70,8 @@ MpvObject {
     anchors.fill: parent
 
     onReady: {
+        root.setProperty("sub-file-paths", app.pathSetting("General", "SubtitlesFolders").join(":"))
+
         // 打开上次播放的文件，暂停并在播放器关闭或上次保存时的位置
         window.openFile(app.setting("General", "lastPlayedFile"), false, true)
         root.setProperty("start", "+" + app.setting("General", "lastPlayedPosition"))
@@ -119,6 +121,15 @@ MpvObject {
             videoList.setPlayingVideo(nextFileRow)
         }
     }
+
+    onPauseChanged: {
+        if (pause) {
+            footer.playPauseButton.icon.name = "media-playback-start"
+        } else {
+            footer.playPauseButton.icon.name = "media-playback-pause"
+        }
+    }
+
 
     // 滚动播放列表到播放加载的文件
     Timer {
