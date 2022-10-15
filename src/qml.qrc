@@ -7,5 +7,6 @@
         <file>qml/MpvVideo.qml</file>
         <file>qml/Footer.qml</file>
         <file>qml/VideoProgressBar.qml</file>
+        <file>qml/Osd.qml</file>
     </qresource>
 </RCC>
