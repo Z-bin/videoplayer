@@ -9,6 +9,7 @@ ToolBar {
     property alias footerRow: footerRow
     property alias timeInfo: timeInfo
     property alias playPauseButton: playPauseButton
+    property alias volume: volume
 
     contentHeight: 40
     contentWidth: window.width
@@ -85,5 +86,7 @@ ToolBar {
                 text: actions.muteAction.text
             }
         }
+
+        VolumeSlider { id: volume }
     }
 }

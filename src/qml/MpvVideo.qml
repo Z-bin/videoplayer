@@ -82,6 +82,8 @@ MpvObject {
 
         footer.timeInfo.currentTime = mpv.formatTime(app.setting("General", "lastPlayedPosition"))
         footer.timeInfo.totalTime = mpv.formatTime(app.setting("General", "lastPlayedDuration"))
+
+        footer.volume.value = app.setting("General", "volume")
     }
 
     // 加载文件时获取章节
