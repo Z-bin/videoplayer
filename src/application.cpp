@@ -5,6 +5,8 @@
 #include <QApplication>
 #include <QAction>
 #include <QCoreApplication>
+#include <QDir>
+#include <QFileInfo>
 #include <QStandardPaths>
 #include <KConfig>
 #include <KConfigDialog>
@@ -38,6 +40,21 @@ void Application::configureShortcust()
     dlg.setModal(true);
     dlg.addCollection(&m_collection);
     dlg.configure(false);
+}
+
+QString Application::argument(int key)
+{
+    return args[key];
+}
+
+void Application::addArgument(int key, QString value)
+{
+    args.insert(key, value);
+}
+
+QString Application::getPathFromArg(QString arg)
+{
+    return QUrl::fromUserInput(arg, QDir::currentPath()).toLocalFile();
 }
 
 void Application::hideCursor()

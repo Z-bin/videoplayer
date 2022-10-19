@@ -72,18 +72,21 @@ MpvObject {
     onReady: {
         root.setProperty("sub-file-paths", app.pathSetting("General", "SubtitlesFolders").join(":"))
 
-        // 打开上次播放的文件，暂停并在播放器关闭或上次保存时的位置
-        window.openFile(app.setting("General", "lastPlayedFile"), false, true)
-        root.setProperty("start", "+" + app.setting("General", "lastPlayedPosition"))
-        // 设置进度条位置
-        footer.progressBar.from = 0;
-        footer.progressBar.to = app.setting("General", "lastPlayedDuration")
-        footer.progressBar.value = app.setting("General", "lastPlayedPosition")
-
-        footer.timeInfo.currentTime = mpv.formatTime(app.setting("General", "lastPlayedPosition"))
-        footer.timeInfo.totalTime = mpv.formatTime(app.setting("General", "lastPlayedDuration"))
-
         footer.volume.value = app.setting("General", "volume")
+        if (app.argument(0) !== "") {
+            openFile(app.getPathFromArg(app.argument(0)), true, true);
+        } else {
+            // 打开上次播放的文件，暂停并在播放器关闭或上次保存时的位置
+            window.openFile(app.setting("General", "lastPlayedFile"), false, true)
+            root.setProperty("start", "+" + app.setting("General", "lastPlayedPosition"))
+            // 设置进度条位置
+            footer.progressBar.from = 0;
+            footer.progressBar.to = app.setting("General", "lastPlayedDuration")
+            footer.progressBar.value = app.setting("General", "lastPlayedPosition")
+
+            footer.timeInfo.currentTime = mpv.formatTime(app.setting("General", "lastPlayedPosition"))
+            footer.timeInfo.totalTime = mpv.formatTime(app.setting("General", "lastPlayedDuration"))
+        }
     }
 
     // 加载文件时获取章节

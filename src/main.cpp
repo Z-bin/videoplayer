@@ -8,9 +8,11 @@
 #include "worker.h"
 
 #include <QGuiApplication>
+#include <QCommandLineParser>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQmlContext>
+#include <QQuickItem>
 #include <QThread>
 #include <QApplication>
 
@@ -23,6 +25,10 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setOrganizationName("georgefb");
     app.setOrganizationDomain("georgefb.com");
+
+    QCommandLineParser parser;
+    parser.addPositionalArgument(QStringLiteral("file"), i18n("Document to open"));
+    parser.process(app);
 
     // Qt sets the locale in the QGuiApplication constructor, but libmpv
     // requires the LC_NUMERIC category to be set to "C", so change it back.
@@ -37,6 +43,9 @@ int main(int argc, char *argv[])
     QQuickStyle::setFallbackStyle(QStringLiteral("Fusion"));
 
     std::unique_ptr<Application> myApp = std::make_unique<Application>();
+    for (auto i = 0; i < parser.positionalArguments().size(); ++i)  {
+        myApp->addArgument(i, parser.positionalArguments().at(i));
+    }
 
     // 放入线程中防止获取时间阻塞
     auto worker = Worker::instance();
@@ -67,7 +76,7 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty(QStringLiteral("app"), myApp.release());
     qmlRegisterUncreatableType<Application>("Application", 1, 0, "Application",
-                                               QStringLiteral("Application should not be created in QML"));
+                                             QStringLiteral("Application should not be created in QML"));
 
     engine.load(url);
 
