@@ -83,9 +83,9 @@ QString Application::iconName(const QIcon &icon)
     return icon.name();
 }
 
-QVariant Application::setting(const QString group, const QString key)
+QVariant Application::setting(const QString group, const QString key, const QString defaultValue)
 {
-    return m_config->group("General").readEntry(key);
+    return m_config->group(group).readEntry(key, defaultValue);
 }
 
 void Application::setSetting(const QString group, const QString key, const QString value)
