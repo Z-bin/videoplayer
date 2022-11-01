@@ -158,19 +158,49 @@ void Application::setupActions(const QString &actionName)
         m_collection.setDefaultShortcut(action, Qt::Key_M);
         m_collection.addAction(actionName, action);
     }
-    if (actionName == QStringLiteral("seekForward")) {
+    if (actionName == QStringLiteral("seekForwardSmall")) {
         QAction *action = new QAction(this);
-        action->setText(i18n("Seek Forward"));
+        action->setText(i18n("Seek Small Step Forward"));
         action->setIcon(QIcon::fromTheme("media-seek-forward"));
         action->setShortcut(QKeySequence(Qt::Key_Right));
         m_collection.setDefaultShortcut(action, Qt::Key_Right);
         m_collection.addAction(actionName, action);
     }
-    if (actionName == QStringLiteral("seekBackward")) {
+    if (actionName == QStringLiteral("seekBackwardSmall")) {
         QAction *action = new QAction();
-        action->setText(i18n("Seek Backward"));
+        action->setText(i18n("Seek Small Step Backward"));
         action->setIcon(QIcon::fromTheme("media-seek-backward"));
         m_collection.setDefaultShortcut(action, Qt::Key_Left);
+        m_collection.addAction(actionName, action);
+    }
+    // 快进,根据配置文件,秒数为单位
+    if (actionName == QStringLiteral("seekForwardMedium")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Seek Medium Step Forward"));
+        action->setIcon(QIcon::fromTheme("media-seek-forward"));
+        m_collection.setDefaultShortcut(action, Qt::SHIFT + Qt::Key_Right);
+        m_collection.addAction(actionName, action);
+    }
+    // 快退,根据配置文件,秒数为单位
+    if (actionName == QStringLiteral("seekBackwardMedium")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Seek Medium Step Backward"));
+        action->setIcon(QIcon::fromTheme("media-seek-backward"));
+        m_collection.setDefaultShortcut(action, Qt::SHIFT + Qt::Key_Left);
+        m_collection.addAction(actionName, action);
+    }
+    if (actionName == QStringLiteral("seekForwardBig")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Seek Big Step Forward"));
+        action->setIcon(QIcon::fromTheme("media-seek-forward"));
+        m_collection.setDefaultShortcut(action, Qt::Key_Up);
+        m_collection.addAction(actionName, action);
+    }
+    if (actionName == QStringLiteral("seekBackwardBig")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Seek Big Step Backward"));
+        action->setIcon(QIcon::fromTheme("media-seek-backward"));
+        m_collection.setDefaultShortcut(action, Qt::Key_Down);
         m_collection.addAction(actionName, action);
     }
     if (actionName == QStringLiteral("seekNextSubtitle")) {
