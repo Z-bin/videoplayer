@@ -11,10 +11,11 @@ ToolBar {
     property alias playPauseButton: playPauseButton
     property alias volume: volume
 
-    contentHeight: 40
-    contentWidth: window.width
-    position: ToolBar.Footer
+    anchors.left: mpv.left
+    anchors.right: mpv.right
+    y: mpv.height // 放置于MPV界面下面
     padding: 5
+    position: ToolBar.Footer
 
     RowLayout {
         id: footerRow

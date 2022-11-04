@@ -45,21 +45,10 @@ ApplicationWindow {
 
     header: Header { id: headr }
 
-    footer: Footer { id: footer }
-
     MpvVideo { id: mpv }
+    Footer { id: footer }
 
     PlayList { id: playList }
-
-    // 页脚,作为全屏化的进度条背景
-    Rectangle {
-        id: fullscreenFooter
-        anchors.bottom: mpv.bottom
-        width: window.width
-        height: footer.height
-        visible: false
-        color: "#31363B"
-    }
 
     Osd {id: osd }
 
