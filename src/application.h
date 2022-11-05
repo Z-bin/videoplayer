@@ -29,6 +29,9 @@ public:
     explicit Application(QObject *parent = nullptr);
     ~Application() = default;
 
+signals:
+    void settingsChanged();
+
 public slots:
     void configureShortcust();  // 配置快捷键
     QString argument(int key);

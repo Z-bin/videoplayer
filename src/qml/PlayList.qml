@@ -11,7 +11,7 @@ Rectangle {
     property int minWidth: 500
     property alias tableView: tableView
 
-    height: parent.height
+    height: mpv.height
     width: (parent.width * 0.33) < 500 ? 500 : parent.width * 0.33
     x: parent.width
 
