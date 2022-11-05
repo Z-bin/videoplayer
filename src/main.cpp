@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setOrganizationName("georgefb");
     app.setOrganizationDomain("georgefb.com");
+    app.setWindowIcon(QIcon::fromTheme("folder-videos-symbolic"));
 
     QCommandLineParser parser;
     parser.addPositionalArgument(QStringLiteral("file"), i18n("Document to open"));
