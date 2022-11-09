@@ -12,7 +12,7 @@ Rectangle {
     property alias tableView: tableView
 
     height: mpv.height
-    width: (parent.width * 0.33) < 500 ? 500 : parent.width * 0.33
+    width: (parent.width * 0.33) < 550 ? 550 : parent.width * 0.33
     x: parent.width
 
     onWidthChanged: {
@@ -21,7 +21,7 @@ Rectangle {
 
     TableView {
         id: tableView
-        property var columnWidths: [40, parent.width - 130, 90]
+        property var columnWidths: [50, parent.width - 150, 110]
         anchors.fill: parent
         clip: true
         columnSpacing: 1
@@ -31,6 +31,12 @@ Rectangle {
         rowSpacing: 1
         model: videoListModel
         z: 20
+        ScrollBar.vertical: ScrollBar { id: scrollBar }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onWheel: wheel.accepted = true
     }
 
     ShaderEffectSource {
