@@ -59,6 +59,7 @@ Rectangle {
             PropertyChanges {
                 target: playList
                 x: parent.width
+                visible: false
             }
         },
         State {
@@ -66,6 +67,7 @@ Rectangle {
             PropertyChanges {
                 target: playList
                 x: parent.width - root.width
+                visible: true
             }
         }
     ]
