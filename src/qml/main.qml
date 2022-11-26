@@ -7,6 +7,7 @@ import QtGraphicalEffects 1.12
 import Qt.labs.platform 1.0 as PlatformDialog
 
 import mpv 1.0
+import "Settings"
 
 ApplicationWindow {
     id: window
@@ -26,7 +27,7 @@ ApplicationWindow {
             videoList.getVideos(path)
         }
 
-        app.setSetting("General", "lastPlayedFile", path)
+        settings.set("General", "lastPlayedFile", path)
     }
 
     visible: true
@@ -44,6 +45,7 @@ ApplicationWindow {
     Actions { id: actions }
 
     header: Header { id: headr }
+    HarunaSettings { id: hSettings}
 
     MpvVideo { id: mpv }
     Footer { id: footer }
@@ -86,13 +88,13 @@ ApplicationWindow {
             TextField {
                 id: openUrlTextField
                 Layout.fillWidth: true
-
+                text: settings.get("General", "lastUrl")
                 Keys.onPressed: {
                     if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                         openFile(openUrlTextField.text, true, false)
                         openUrlPopup.close()
                         openUrlTextField.clear()
-                        app.setSetting("General", "lastUrl", openUrlTextField.text)
+                        settings.set("General", "lastUrl", openUrlTextField.text)
                     }
                     if (event.key === Qt.Key_Escape) {
                         openUrlPopup.close()
@@ -108,7 +110,7 @@ ApplicationWindow {
                     openFile(openUrlTextField.text, true, false)
                     openUrlPopup.close()
                     openUrlTextField.clear()
-                    app.setSetting("General", "lastUrl", openUrlTextField.text)
+                    settings.set("General", "lastUrl", openUrlTextField.text)
                 }
             }
         }

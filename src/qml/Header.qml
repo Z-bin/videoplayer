@@ -18,6 +18,11 @@ ToolBar {
             Layout.alignment: Qt.AlignLeft
 
             ToolButton {
+                action: actions.configureAction
+                text: qsTr("Settings")
+            }
+
+            ToolButton {
                 action: actions.openAction
             }
             ToolButton {
@@ -134,10 +139,6 @@ ToolBar {
             id: headerRowRight
             Layout.alignment: Qt.AlignRight
 
-            ToolButton {
-                action: actions.configureAction
-                text: qsTr("Settings")
-            }
             ToolButton {
                 action: actions.quitApplicationAction
             }

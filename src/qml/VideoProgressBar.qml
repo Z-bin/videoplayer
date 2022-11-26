@@ -95,7 +95,7 @@ Slider {
 
     onValueChanged: {
         // 记录点击位置,下次打开有效
-        app.setSetting("General", "lastPlayedPosition", value)
+        settings.set("General", "lastPlayedPosition", value)
     }
 
     onPressedChanged: {

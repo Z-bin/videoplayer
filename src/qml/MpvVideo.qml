@@ -14,6 +14,7 @@ MpvObject {
     // 双击全屏化事件
     function toggleFullScreen() {
         if (window.visibility !== Window.FullScreen) {
+            hSettings.state = "hidden"
             window.showFullScreen()
             header.visible = false
             footer.visible = false
@@ -67,28 +68,28 @@ MpvObject {
         root.setProperty("aid", id)
     }
 
-    x: 0
-    y: 0
     width: parent.width
     height: parent.height - footer.height
+    anchors.left: hSettings.right
+    anchors.right: parent.right
 
     onReady: {
-        root.setProperty("sub-file-paths", app.pathSetting("General", "SubtitlesFolders").join(":"))
+        root.setProperty("sub-file-paths", settings.getPath("General", "SubtitlesFolders").join(":"))
 
-        footer.volume.value = app.setting("General", "volume")
+        footer.volume.value = settings.get("General", "volume")
         if (app.argument(0) !== "") {
             openFile(app.getPathFromArg(app.argument(0)), true, true);
         } else {
             // 打开上次播放的文件，暂停并在播放器关闭或上次保存时的位置
-            window.openFile(app.setting("General", "lastPlayedFile"), false, true)
-            root.setProperty("start", "+" + app.setting("General", "lastPlayedPosition"))
+            window.openFile(settings.get("General", "lastPlayedFile"), false, true)
+            root.setProperty("start", "+" + settings.get("General", "lastPlayedPosition"))
             // 设置进度条位置
             footer.progressBar.from = 0;
-            footer.progressBar.to = app.setting("General", "lastPlayedDuration")
-            footer.progressBar.value = app.setting("General", "lastPlayedPosition")
+            footer.progressBar.to = settings.get("General", "lastPlayedDuration")
+            footer.progressBar.value = settings.get("General", "lastPlayedPosition")
 
-            footer.timeInfo.currentTime = mpv.formatTime(app.setting("General", "lastPlayedPosition"))
-            footer.timeInfo.totalTime = mpv.formatTime(app.setting("General", "lastPlayedDuration"))
+            footer.timeInfo.currentTime = mpv.formatTime(settings.get("General", "lastPlayedPosition"))
+            footer.timeInfo.totalTime = mpv.formatTime(settings.get("General", "lastPlayedDuration"))
         }
     }
 
@@ -102,7 +103,7 @@ MpvObject {
     onDurationChanged: {
         footer.progressBar.from = 0
         footer.progressBar.to = duration
-        app.setSetting("General", "lastPlayedDuration", duration)
+        settings.set("General", "lastPlayedDuration", duration)
 
         footer.timeInfo.totalTime = mpv.formatTime(duration)
     }
@@ -215,7 +216,7 @@ MpvObject {
 
         onWheel: {
             var currentVolume = parseInt(mpv.getProperty("volume"))
-            var volumeStep = parseInt(app.setting("General", "VolumeStep", 5))
+            var volumeStep = parseInt(settings.get("General", "VolumeStep"))
             if (wheel.angleDelta.y > 0 && currentVolume < 100) {
                 mpv.setProperty("volume", currentVolume + volumeStep)
             } else if (wheel.angleDelta.y < 0 && currentVolume >= 0) {

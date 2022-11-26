@@ -4,10 +4,11 @@ import QtQuick.Controls 2.12
 Item {
     id: root
 
+    property alias label: label
+
     function message(text) {
-        var osdFontSize = parseInt(app.setting("General", "OsdFontSize", 25));
+        var osdFontSize = parseInt(settings.get("General", "OsdFontSize"));
         label.text = text
-        label.font.pixelSize = osdFontSize
         if (osdFontSize === 0) {
             return
         }
@@ -22,14 +23,14 @@ Item {
 
     Label {
         id: label
-        x: 10
-        y: 10
+        x: mpv.x + 10
+        y: mpv.y + 10
         visible: false
         background: Rectangle {
             color: systemPalette.base
         }
         padding: 5
-        font.pixelSize: parseInt(app.setting("General", "OsdFontSize", 25));
+        font.pixelSize: parseInt(settings.get("General", "OsdFontSize"));
     }
 
     Timer {

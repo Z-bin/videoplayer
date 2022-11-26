@@ -13,8 +13,7 @@ Slider {
     implicitWidth: 100
     implicitHeight: 25
     wheelEnabled:  true
-    stepSize: app.setting("General", "VolumeStep", 5)
-
+    stepSize: settings.get("General", "VolumeStep")
     background: Rectangle {
         id: harunaSliderBG
         color: systemPalette.base
@@ -41,7 +40,7 @@ Slider {
     }
     onValueChanged: {
         mpv.setProperty("volume", value.toFixed(0))
-        app.setSetting("General", "volume", value.toFixed(0))
+        settings.set("General", "volume", value.toFixed(0))
     }
 
     Connections {
@@ -50,7 +49,7 @@ Slider {
     }
     Connections {
         target: app
-        onSettingsChanged: stepSize = app.setting("General", "VolumeStep", 5)
+        onSettingsChanged: stepSize = settings.get("General", "VolumeStep")
     }
 
 }
