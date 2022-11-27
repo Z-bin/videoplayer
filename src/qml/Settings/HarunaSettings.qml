@@ -6,176 +6,76 @@ import QtGraphicalEffects 1.12
 Pane {
     id: root
 
-    x: -350; y: 0; z: 50
-    width: 350
+    x: -width; y: 0; z: 50
+    width: 600
     height: mpv.height
     padding: 10
 
-    Component.onCompleted: state = "hidden"
+    state: "visible"
 
-    GridLayout {
-        id: grid
-        columns: 2
-        anchors.fill: parent
+    Item {
+        id: nav
+        width: root.width * 0.3 - root.padding
+        height: parent.height
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
 
-        // OSD 字体大小
-        Label {
-            color: systemPalette.text
-            text:  qsTr("Osd font size")
-            Layout.alignment: Qt.AlignRight
+        Rectangle {
+            width: 1
+            height: parent.height
+            anchors.right: parent.right
+            color: systemPalette.dark
         }
 
-        Item {
-            height: osdFontSize.height
-            SpinBox {
-                id: osdFontSize
-                editable: true
-                from: 0
-                to: 100
-                value: settings.get("General", "OsdFontSize")
-                onValueChanged: {
-                    if (root.state === "visible") {
-                        osd.label.font.pixelSize = osdFontSize.value
-                        osd.message("Test osd font size")
-                        settings.set("General", "OsdFontSize", osdFontSize.value)
-                    }
+        ColumnLayout {
+            width: parent.width - root.padding
+            Button {
+                text: qsTr("General")
+                Layout.fillWidth: true
+                onClicked: {
+                    settingsViewLoader.sourceComponent = generalSettings
                 }
             }
-            Layout.fillWidth: true
-        }
 
-        // 音量变化阶数
-        Label {
-            color: systemPalette.text
-            text: "Volume step"
-            Layout.alignment: Qt.AlignRight
-        }
-
-        Item {
-            height: volumeStep.height
-            SpinBox {
-                id: volumeStep
-                editable: true
-                from: 0
-                to: 100
-                value: settings.get("General", "VolumeStep")
-                onValueChanged: {
-                    if (root.state === "visible") {
-                        settings.set("General", "VolumeStep", volumeStep.value)
-                    }
+            Button {
+                text: qsTr("Color Adjustments")
+                Layout.fillWidth: true
+                onClicked: {
+                    settingsViewLoader.sourceComponent = colorAdjustmentsSettings
                 }
             }
-            Layout.fillWidth: true
-        }
-
-        // 分隔符
-        ToolSeparator {
-            Layout.columnSpan: 2
-            Layout.fillWidth: true
-            orientation: Qt.Horizontal
-            contentItem: Rectangle {
-                implicitHeight: parent.vertical ? 24 : 1
-                color: systemPalette.base
-            }
-        }
-
-        // Seek Small Step
-        Label {
-            color: systemPalette.text
-            text: "Seek Small Step"
-            Layout.alignment: Qt.AlignRight
-        }
-
-        Item {
-            height: seekSmallStep.height
-            SpinBox {
-                id: seekSmallStep
-                editable: true
-                from: 0
-                to: 100
-                value: settings.get("General", "SeekSmallStep")
-                onValueChanged: {
-                    if (root.state === "visible") {
-                        settings.set("General", "SeekSmallStep", seekSmallStep.value)
-                    }
-                }
-            }
-            Layout.fillWidth: true
-        }
-
-        // Seek Medium Step
-        Label {
-            color: systemPalette.text
-            text: "Seek Medium Step"
-            Layout.alignment: Qt.AlignRight
-        }
-
-        Item {
-            height: seekMediumStep.height
-            SpinBox {
-                id: seekMediumStep
-                editable: true
-                from: 0
-                to: 100
-                value: settings.get("General", "SeekMediumStep")
-                onValueChanged: {
-                    if (root.state === "visible") {
-                        settings.set("General", "SeekMediumStep", seekMediumStep.value)
-                    }
-                }
-            }
-            Layout.fillWidth: true
-        }
-
-        // Seek Big Step
-        Label {
-            color: systemPalette.text
-            text: "Seek Big Step"
-            Layout.alignment: Qt.AlignRight
-        }
-
-        Item {
-            height: seekBigStep.height
-            SpinBox {
-                id: seekBigStep
-                editable: true
-                from: 0
-                to: 100
-                value: settings.get("General", "SeekBigStep")
-                onValueChanged: {
-                    if (root.state === "visible") {
-                        settings.set("General", "SeekBigStep", seekBigStep.value)
-                    }
-                }
-            }
-            Layout.fillWidth: true
-        }
-
-        ToolSeparator {
-            Layout.columnSpan: 2
-            Layout.fillWidth: true
-            orientation: Qt.Horizontal
-            contentItem: Rectangle {
-                implicitHeight: parent.vertical ? 24 : 1
-                color: systemPalette.base
-            }
-        }
-
-        SubtitlesFolders {
-            id: subtitleFolders
-            _width: grid.width
-        }
-
-        Item {
-            Layout.columnSpan: 2
-            Layout.fillHeight: true
-            Layout.fillWidth: true
         }
     }
+
+    Loader {
+        id: settingsViewLoader
+        anchors.left: nav.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: root.padding
+        sourceComponent: generalSettings
+    }
+
+    Component {
+        id: generalSettings
+        GeneralSettings {
+            width: root.width * 0.7 - root.padding
+        }
+    }
+
+    Component {
+        id: colorAdjustmentsSettings
+        ColorAdjustmentsSettings {
+            width: root.width * 0.7 - root.padding
+        }
+    }
+
     states: [
         State {
             name: "hidden"
-            PropertyChanges { target: root; x: -350; visible: false }
+            PropertyChanges { target: root; x: -width; visible: false }
         },
         State {
             name : "visible"
