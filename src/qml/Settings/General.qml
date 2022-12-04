@@ -12,7 +12,6 @@ Item {
 
         width: parent.width
         columns: 2
-        Component.onCompleted: console.log(width)
 
         // OSD 字体大小
         Label {

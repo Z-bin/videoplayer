@@ -184,7 +184,7 @@ MpvObject {
 
     MouseArea {
         id: mouseArea
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
         anchors.fill: parent
         hoverEnabled: true
 
@@ -228,8 +228,18 @@ MpvObject {
 
         onClicked: {
             focus = true
-            if (mouse.button === Qt.RightButton) {
-                root.play_pause()
+            if (mouse.button === Qt.LeftButton) {
+                if (settings.get("Mouse", "LeftButtonAction") !== "none") {
+                    actions.actions[settings.get("Mouse", "LeftButtonAction")].trigger()
+                }
+            } else if (mouse.button === Qt.MiddleButton) {
+                if (settings.get("Mouse", "MiddleButtonAction") !== "none") {
+                    actions.actions[settings.get("Mouse", "MiddleButtonAction")].trigger()
+                }
+            } else if (mouse.button === Qt.RightButton) {
+                if (settings.get("Mouse", "RightButtonAction") !== "none") {
+                    actions.actions[settings.get("Mouse", "RightButtonAction")].trigger()
+                }
             }
         }
 
