@@ -91,6 +91,15 @@ void Application::setupActions(const QString &actionName)
         QAction *action = new QAction();
         action->setText(i18n("Configure"));
         action->setIcon(QIcon::fromTheme("configure"));
+        m_collection.setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_Comma);
+        m_collection.addAction(actionName, action);
+    }
+
+    if (actionName == QStringLiteral("fullscreen")) {
+        QAction *action = new QAction();
+        action->setText(i18n("Fullscreen"));
+        action->setIcon(QIcon::fromTheme("view-fullscreen"));
+        m_collection.setDefaultShortcut(action, Qt::Key_F);
         m_collection.addAction(actionName, action);
     }
 
@@ -319,7 +328,7 @@ void Application::setupActions(const QString &actionName)
         QAction *action = new QAction();
         action->setText(i18n("Zoom In"));
         action->setIcon(QIcon::fromTheme("zoom-in"));
-        m_collection.setDefaultShortcut(action, Qt::ALT + Qt::Key_Plus);
+        m_collection.setDefaultShortcut(action, Qt::Key_U);
         m_collection.addAction(actionName, action);
     }
     if (actionName == QStringLiteral("zoomOut")) {
