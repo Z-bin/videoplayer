@@ -21,6 +21,8 @@ Settings::Settings(QObject *parent)
         {"LeftButtonAction",      QVariant(QStringLiteral("none"))},
         {"MiddleButtonAction",    QVariant(QStringLiteral("none"))},
         {"RightButtonAction",     QVariant(QStringLiteral("playPauseAction"))},
+        {"ScrollUpAction",        QVariant(QStringLiteral("none"))},
+        {"ScrollDownAction",      QVariant(QStringLiteral("none"))},
         {"volume",                QVariant(75)}
     };
 
