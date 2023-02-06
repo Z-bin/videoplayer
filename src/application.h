@@ -36,7 +36,7 @@ public slots:
     void configureShortcust();  // 配置快捷键
     QString argument(int key);
     void addArgument(int key, QString value);
-    QString getPathFromArg(QString arg);
+    QUrl getPathFromArg(QString arg);
 
     void hideCursor();
     void showCursor();
