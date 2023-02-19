@@ -44,6 +44,24 @@ Item {
     property alias saturationDownAction: saturationDownAction               // 减少饱和度
 
     Action {
+        id: togglePlaylistAction
+        property var qaction: app.action("togglePlaylist")
+        text: qaction.text
+        shortcut: qaction.shortcut
+        icon.name: app.iconName(qaction.icon)
+
+        Component.onCompleted: actions["togglePlaylistAction"] = togglePlaylistAction
+
+        onTriggered: {
+            if (playList.state == "visible") {
+                playList.state = "hidden"
+            } else {
+                playList.state = "visible"
+            }
+        }
+    }
+
+    Action {
         id: volumeUpAction
         property var qaction: app.action("volumeUp")
         text: qaction.text
