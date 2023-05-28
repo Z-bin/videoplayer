@@ -24,6 +24,7 @@ find_package(KF5 COMPONENTS
     CoreAddons
     XmlGui
     I18n
+    FileMetaData
 )
 
 set(${PROJECT_NAME}_SRC
@@ -32,6 +33,7 @@ set(${PROJECT_NAME}_SRC
     src/settings.cpp
     src/lockmanager.cpp
     src/mpvobject.cpp
+    src/qthelper.h
     src/subtitlesfoldersmodel.cpp
     src/track.cpp
     src/tracksmodel.cpp
@@ -52,8 +54,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     KF5::CoreAddons
     KF5::XmlGui
     KF5::I18n
+    KF5::FileMetaData
     mpv
-    mediainfo
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

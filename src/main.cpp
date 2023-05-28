@@ -19,6 +19,7 @@
 #include <QThread>
 #include <QApplication>
 
+#include <klocalizedstring.h>
 #include <memory>
 
 int main(int argc, char *argv[])

@@ -16,7 +16,7 @@ signals:
     void videoDuration(int index, QString duration);
 
 public slots:
-    void getVideoDuration(int index, QString path);
+    void getVideoDuration(int index, const QString &path);
 
 private:
     static Worker *sm_worker;

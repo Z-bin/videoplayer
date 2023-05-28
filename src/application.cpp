@@ -21,6 +21,13 @@ Application::Application(QObject *parent)
     m_shortcuts = new KConfigGroup(m_config, "Shortcuts");
 }
 
+QString Application::formatTime(const double time)
+{
+    QTime t(0, 0, 0);
+    QString formattedTime = t.addSecs(static_cast<qint64>(time)).toString("hh:mm:ss");
+    return formattedTime;
+}
+
 void Application::configureShortcust()
 {
     KShortcutsDialog dlg(KShortcutsEditor::AllActions, KShortcutsEditor::LetterShortcutsAllowed, nullptr);
