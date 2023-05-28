@@ -10,10 +10,12 @@ Rectangle {
 
     property int minWidth: 500
     property alias tableView: tableView
+    property bool canToggleWithMouse: settings.get("Playlist", "CanToogleWithMouse")
+    property string position: settings.get("Playlist", "Position")
 
     height: mpv.height
     width: (parent.width * 0.33) < 550 ? 550 : parent.width * 0.33
-    x: parent.width
+    x: position === "right" ? parent.width : -width
 
     onWidthChanged: {
         tableView.columnWidthProvider = function (column) { return tableView.columnWidths[column] }
@@ -58,7 +60,7 @@ Rectangle {
             name: "hidden"
             PropertyChanges {
                 target: playList
-                x: parent.width
+                x: position === "right" ? parent.width : -width
                 visible: false
             }
         },
@@ -66,7 +68,7 @@ Rectangle {
             name: "visible"
             PropertyChanges {
                 target: playList
-                x: parent.width - root.width
+                x: position === "right" ? parent.width - root.width : 0
                 visible: true
             }
         }

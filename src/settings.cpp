@@ -23,7 +23,11 @@ Settings::Settings(QObject *parent)
         {"RightButtonAction",     QVariant(QStringLiteral("playPauseAction"))},
         {"ScrollUpAction",        QVariant(QStringLiteral("none"))},
         {"ScrollDownAction",      QVariant(QStringLiteral("none"))},
-        {"volume",                QVariant(75)}
+        {"volume",                QVariant(75)},
+        // Playlist
+        {"CanToogleWithMouse",    QVariant(true)},
+        {"Position",              QVariant(QStringLiteral("right"))},
+
     };
 
     m_config = KSharedConfig::openConfig("georgefb/haruna.conf");

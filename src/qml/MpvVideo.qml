@@ -192,18 +192,36 @@ MpvObject {
 
         onExited: hideCursorTimer.running = false
 
-        // 鼠标靠近右侧显示播放列表
+        // 鼠标靠近显示播放列表
         onMouseXChanged: {
             root.focus = true
             mx = mouseX
-            if (mouseX > root.width - 50 && playList.tableView.rows > 0) {
-                playList.state = "visible"
-            }
-            if (mouseX < root.width - playList.width) {
-                playList.state = "hidden"
+            if (playList.position === "right") {
+                if (mouseX > root.width - 50 && playList.tableView.rows > 1) {
+                    if (playList.canToggleWithMouse) {
+                        playList.state = "visible"
+                    }
+                }
+                if (mouseX < root.width - playList.width) {
+                    if (playList.canToggleWithMouse) {
+                        playList.state = "hidden"
+                    }
+                }
+            } else {
+
+                if (mouseX < 50 && playList.tableView.rows > 1) {
+
+                    if (playList.canToggleWithMouse) {
+                        playList.state = "visible"
+                    }
+                }
+                if (mouseX > playList.width) {
+                    if (playList.canToggleWithMouse) {
+                        playList.state = "hidden"
+                    }
+                }
             }
         }
-
         onMouseYChanged: {
             root.focus = true
             my = mouseY

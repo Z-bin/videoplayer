@@ -46,6 +46,13 @@ Pane {
         }
     }
 
+    Component {
+        id: playlistSettings
+        Playlist {
+            width: root.width * 0.7 - root.padding
+        }
+    }
+
     states: [
         State {
             name: "hidden"
